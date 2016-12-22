@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.bit.member.dao.MemberDAO">
+
+	<!-- 개인회원 로그인 -->
+	<select id="login" parameterType="memberVO" resultType="memberVO">
+		select id, type
+		  from my_day_member_table
+		 where id = #{id} and password = #{password}
+	</select>
+	
+	<!-- 개인회원 가입 -->
+ 	<insert id="signUp" parameterType="memberVO">
+		insert into my_day_member_table(no, id, password, name, gender, birth, addr, email, tel, nickname)
+			values(seq_my_day_member_table_no.nextval, #{id}, #{password}, #{name}, #{gender}, #{birth}, #{addr}, #{email}, #{tel}, #{nickname} )
+	</insert>
+	
+</mapper>

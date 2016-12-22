@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	    <!-- DB 연결 설정 -->
+    <!-- http://d2.naver.com/helloworld/5102792 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+    	  destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<property name="username" value="hr" />
+		<property name="password" value="hr" />    
+    </bean>
+    
+    <!-- sqlSession과 mapper 인터페이스의 객체를 빈으로 생성하고 다른 빈에 주입(sqlSession 생성) -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    	<property name="dataSource" ref="dataSource" />
+    	<property name="configLocation" value="classpath:config/mybatis/sqlMapConfig.xml" />
+    	<property name="mapperLocations" value="classpath:config/sqlmap/oracle/*.xml" />
+    	
+    </bean>
+    
+    <!-- DAO에서 DB와 연결과 종료를 담당 -->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" >
+    	<constructor-arg ref="sqlSessionFactory" />
+    </bean>
+
+	<!-- 메일 기능 -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="xxxxxxxxx@gmail.com" /> <!-- 보내는사람 메일계정 -->
+		<property name="password" value="xxxxx(비밀번호)" /> <!-- 보내는사람 비밀번호 -->
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.auth">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+		
+</beans>
